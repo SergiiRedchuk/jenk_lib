@@ -2,6 +2,7 @@ package gov.ca.cwds.jenkins
 
 class SshGit {
     def credentialsId
+    
     SshGit(credentialsId) {
         this.credentialsId = credentialsId
     }
