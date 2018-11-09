@@ -10,8 +10,9 @@ class SshAgent implements Serializable {
     }
 
     def exec(String command) {
+        def cmd = Utils.sshCommand(command)
         script.sshagent (credentials: [credentialsId]) {
-            sh(script: sshCommand(command), returnStatus: true)
+            script.sh(script: cmd, returnStatus: true)
         }
     }
 }
