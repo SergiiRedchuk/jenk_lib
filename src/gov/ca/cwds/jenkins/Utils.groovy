@@ -20,7 +20,7 @@ class Utils implements Serializable {
 
     static boolean hasLicensingSupport(script) {
         if (hasGradleBuildFile(script)) {
-            script.sh (script: 'grep -c "com.github.hierynomus.license" build.gradle', returnStatus: true) == 0
+            script.sh (script: 'grep -c "com.github.hierynomus.licenseZ" build.gradle', returnStatus: true) == 0
         } else if (hasPackageJsonFile(script)) {
             // todo
             false
