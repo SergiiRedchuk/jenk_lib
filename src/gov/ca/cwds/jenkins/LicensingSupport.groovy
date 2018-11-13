@@ -13,7 +13,9 @@ class LicensingSupport implements Serializable {
 
     def generateLicenseInfo() {
         if ('master' == this.branchName) {
-            switch (getLicensingSupportType(this.script)) {
+            def licensingSupportType = getLicensingSupportType(this.script)
+            this.script.echo 'Detected Licensing Support Type: ' + licensingSupportType.title
+            switch (licensingSupportType) {
                 case LicensingSupportType.GRADLE_HIERYNOMUS_LICENSE:
                     // todo deleteLicenses copyLicenses
                     // todo no gradle wrapper?
