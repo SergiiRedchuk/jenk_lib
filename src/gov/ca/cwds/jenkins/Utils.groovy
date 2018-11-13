@@ -19,10 +19,9 @@ class Utils implements Serializable {
     static boolean isFrontEndProject = Utils.&hasPackageJsonFile
 
     static boolean hasLicensingSupport(script) {
-        if (isBackEndProject(script)) {
-            // todo if no wrapper?
-            script.sh (script: './gradlew -q --dry-run downloadLicenses', returnStatus: true) == 0
-        } else if (isFrontEndProject()) {
+        if (hasGradleBuildFile(script)) {
+            script.sh (script: 'grep -c "com.github.hierynomus.license" build.gradle', returnStatus: true) == 0
+        } else if (hasPackageJsonFile(script)) {
             // todo
             false
         } else {
