@@ -10,7 +10,25 @@ class Utils implements Serializable {
         script.sh (script: 'test -e build.gradle', returnStatus: true) == 0
     }
 
+    static boolean isBackEndProject = Utils.&hasGradleBuildFile
+
     static boolean hasPackageJsonFile(script) {
         script.sh (script: 'test -e package.json', returnStatus: true) == 0
     }
+
+    static boolean isFrontEndProject = Utils.&hasPackageJsonFile
+
+    static boolean hasLicensingSupport(script) {
+        if (isBackEndProject(script)) {
+            // todo if no wrapper?
+            script.sh (script: './gradlew -q --dry-run downloadLicenses', returnStatus: true) == 0
+        } else if (isFrontEndProject()) {
+            // todo
+            false
+        } else {
+            // todo error
+            false
+        }
+    }
+
 }
