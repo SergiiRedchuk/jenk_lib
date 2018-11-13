@@ -16,16 +16,17 @@ class LicensingSupport implements Serializable {
             switch (getLicensingSupportType(this.script)) {
                 case LicensingSupportType.GRADLE_HIERYNOMUS_LICENSE:
                     // todo deleteLicenses copyLicenses
+                    // todo no gradle wrapper?
                     this.script.sh './gradlew deleteLicenses downloadLicenses copyLicenses'
                     // todo check result?
                     break
                 case LicensingSupportType.RUBY_LICENSE_FINDER:
                     break
                 case LicensingSupportType.NONE:
-            // todo error
+                    throw new Exception('No known Licensing Support is found in the project')
             }
         } else {
-            script.echo 'Not working with the master branch. Skipping License Generation.'
+            script.echo 'Not working with the master branch. Skipping License Generation for an other branch.'
         }
     }
 
