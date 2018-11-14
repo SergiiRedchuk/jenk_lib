@@ -13,7 +13,7 @@ class LicensingSupport implements Serializable {
         this.script = script
         this.branchName = branchName
         this.sshCredentialsId = sshCredentialsId
-        this.sshAgent = new SshAgent(script, sshCredentialsId)
+        //this.sshAgent = new SshAgent(script, sshCredentialsId)
         this.licensingSupportType = getLicensingSupportType(script)
         this.script.echo('Detected Licensing Support Type: ' + this.licensingSupportType.title)
     }
