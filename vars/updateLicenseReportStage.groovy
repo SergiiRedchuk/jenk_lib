@@ -11,12 +11,7 @@ def call(stageBody) {
     stageBody()
 
     stage('Update License Report') {
-        def sshAgent
-        if (stageParams.sshAgent) {
-            sshAgent = stageParams.sshAgent
-        } else {
-            sshAgent = new SshAgent(this, stageParams.sshCredentialsId)
-        }
+        def sshAgent = new SshAgent(this, stageParams.sshCredentialsId)
         def licensingSupport = new LicensingSupport(this, stageParams.branch, sshAgent)
         licensingSupport.generateAndPushLicenseReport()
     }
