@@ -14,11 +14,14 @@ class LicensingSupport implements Serializable {
         this.branchName = branchName
         this.sshCredentialsId = sshCredentialsId
         //this.sshAgent = new SshAgent(script, sshCredentialsId)
-        this.licensingSupportType = getLicensingSupportType(script)
-        //this.script.echo('Detected Licensing Support Type: ' + this.licensingSupportType.title)
+        this.licensingSupportType = null
     }
 
-    def checkLicensingSupportType() {
+    def initLicensingSupportType() {
+        if (null == this.licensingSupportType) {
+            this.licensingSupportType = getLicensingSupportType(script)
+            this.script.echo('Detected Licensing Support Type: ' + this.licensingSupportType.title)
+        }
         if (LicensingSupportType.NONE == this.licensingSupportType) {
             throw new Exception('No known Licensing Support is found in the project')
         }
@@ -26,7 +29,7 @@ class LicensingSupport implements Serializable {
 
     def generateLicenseReport() {
         if ('master' == this.branchName) {
-            //checkLicensingSupportType()
+            initLicensingSupportType()
             script.echo 'Generating License Information'
             /*
             switch (this.licensingSupportType) {
@@ -44,7 +47,7 @@ class LicensingSupport implements Serializable {
 
     def pushLicenseReport() {
         if ('master' == this.branchName) {
-            //checkLicensingSupportType()
+            initLicensingSupportType()
             script.echo 'Updating License Information'
             /*
             switch (this.licensingSupportType) {
