@@ -12,7 +12,10 @@ class SshAgent implements Serializable {
     def exec(String command) {
         def cmd = sshCommand(command)
         script.sshagent (credentials: [credentialsId]) {
-            script.sh(script: cmd, returnStatus: true)
+            def status = script.sh(script: cmd, returnStatus: true)
+            if (status != 0) {
+                throw new Exception("ssh command '${command}' failed")
+            }
         }
     }
 
