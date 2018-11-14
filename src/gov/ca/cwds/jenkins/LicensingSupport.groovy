@@ -5,15 +5,13 @@ class LicensingSupport implements Serializable {
 
     def script
     def branchName
-    def sshCredentialsId
     def sshAgent
     def licensingSupportType
 
-    LicensingSupport(script, branchName, sshCredentialsId) {
+    LicensingSupport(script, branchName, sshAgent) {
         this.script = script
         this.branchName = branchName
-        this.sshCredentialsId = sshCredentialsId
-        //this.sshAgent = new SshAgent(script, sshCredentialsId)
+        this.sshAgent = sshAgent
         this.licensingSupportType = null
     }
 
@@ -31,7 +29,6 @@ class LicensingSupport implements Serializable {
         if ('master' == this.branchName) {
             initLicensingSupportType()
             script.echo 'Generating License Information'
-            /*
             switch (this.licensingSupportType) {
                 case LicensingSupportType.GRADLE_HIERYNOMUS_LICENSE:
                     this.script.sh './gradlew deleteLicenses downloadLicenses copyLicenses'
@@ -39,7 +36,7 @@ class LicensingSupport implements Serializable {
                 case LicensingSupportType.RUBY_LICENSE_FINDER:
                     this.script.sh 'yarn licenses-report'
                     break
-            }*/
+            }
         } else {
             script.echo 'Not working with the master branch. Skipping License Generation for the other branch.'
         }
@@ -49,7 +46,6 @@ class LicensingSupport implements Serializable {
         if ('master' == this.branchName) {
             initLicensingSupportType()
             script.echo 'Updating License Information'
-            /*
             switch (this.licensingSupportType) {
                 case LicensingSupportType.GRADLE_HIERYNOMUS_LICENSE:
                 case LicensingSupportType.RUBY_LICENSE_FINDER:
@@ -60,7 +56,6 @@ class LicensingSupport implements Serializable {
                     this.sshAgent.exec('git push --set-upstream origin master')
                     break
             }
-            */
         } else {
             script.echo 'Not working with the master branch. Skipping Push License Report for the other branch.'
         }
