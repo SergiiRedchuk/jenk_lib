@@ -50,11 +50,11 @@ class LicensingSupport implements Serializable {
             switch (this.licensingSupportType) {
                 case LicensingSupportType.GRADLE_HIERYNOMUS_LICENSE:
                 case LicensingSupportType.RUBY_LICENSE_FINDER:
-                    this.sshAgent.exec('git config --global user.email cwdsdoeteam@osi.ca.gov')
-                    this.sshAgent.exec('git config --global user.name Jenkins')
+                    this.sshAgent.exec('git config --global user.email cwdsdoeteam@osi.ca.gov', true)
+                    this.sshAgent.exec('git config --global user.name Jenkins', true)
                     this.sshAgent.exec('git add ' + LICENSE_FOLDER)
                     this.sshAgent.exec('git commit -m "updated license info"')
-                    this.sshAgent.exec('git push --set-upstream origin master')
+                    this.sshAgent.exec('git push --set-upstream origin master', true)
                     break
             }
         } else {
