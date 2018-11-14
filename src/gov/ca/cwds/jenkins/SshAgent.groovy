@@ -9,11 +9,11 @@ class SshAgent implements Serializable {
         this.credentialsId = credentialsId
     }
 
-    def exec(String command) {
+    def exec(String command, boolean failOnStatus = false) {
         def cmd = sshCommand(command)
         script.sshagent (credentials: [credentialsId]) {
             def status = script.sh(script: cmd, returnStatus: true)
-            if (status != 0) {
+            if (status != 0 && failOnStatus) {
                 throw new Exception("ssh command '${command}' failed")
             }
         }
