@@ -14,7 +14,7 @@ def call(body) {
      */
 
     stage('Update License Report') {
-        echo sshCredentialsId
+        //echo sshCredentialsId
         echo $sshCredentialsId
     }
 }
