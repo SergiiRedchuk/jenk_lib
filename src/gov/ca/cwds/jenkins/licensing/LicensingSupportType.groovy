@@ -1,4 +1,4 @@
-package gov.ca.cwds.jenkins
+package gov.ca.cwds.jenkins.licensing
 
 enum LicensingSupportType {
     NONE('None'),

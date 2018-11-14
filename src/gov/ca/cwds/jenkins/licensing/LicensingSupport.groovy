@@ -1,4 +1,4 @@
-package gov.ca.cwds.jenkins
+package gov.ca.cwds.jenkins.licensing
 
 class LicensingSupport implements Serializable {
     final def LICENSE_FOLDER = 'legal'
@@ -17,7 +17,7 @@ class LicensingSupport implements Serializable {
 
     def initLicensingSupportType() {
         if (null == this.licensingSupportType) {
-            this.licensingSupportType = getLicensingSupportType(script)
+            this.licensingSupportType = LicensingSupportUtils.getLicensingSupportType(script)
             this.script.info('Detected Licensing Support Type: ' + this.licensingSupportType.title)
         }
         if (LicensingSupportType.NONE == this.licensingSupportType) {
@@ -59,20 +59,5 @@ class LicensingSupport implements Serializable {
         } else {
             script.info 'Not working with the master branch. Skipping Push License Report for the other branch.'
         }
-    }
-
-    static LicensingSupportType getLicensingSupportType(script) {
-        def result = LicensingSupportType.NONE
-        if (Utils.hasGradleBuildFile(script)) {
-            if (script.sh(script: 'grep -c "com.github.hierynomus.license" build.gradle',
-                    returnStatus: true) == 0) {
-                result = LicensingSupportType.GRADLE_HIERYNOMUS_LICENSE
-            }
-        } else if (Utils.hasPackageJsonFile(script)) {
-            if (script.sh(script: 'grep -c "license_finder" package.json', returnStatus: true) == 0) {
-                result = LicensingSupportType.RUBY_LICENSE_FINDER
-            }
-        }
-        result
     }
 }

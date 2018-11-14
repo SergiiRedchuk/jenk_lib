@@ -10,9 +10,14 @@ class SshAgent implements Serializable {
     }
 
     def exec(String command) {
-        def cmd = Utils.sshCommand(command)
+        def cmd = sshCommand(command)
         script.sshagent (credentials: [credentialsId]) {
             script.sh(script: cmd, returnStatus: true)
         }
+    }
+
+    static def sshCommand(String command) {
+        // Used to avoid known_hosts addition, which would require each machine to have GitHub added in advance (maybe should do?)
+        'GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" ' + command
     }
 }
