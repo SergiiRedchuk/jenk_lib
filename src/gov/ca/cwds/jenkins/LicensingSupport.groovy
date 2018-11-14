@@ -15,11 +15,20 @@ class LicensingSupport implements Serializable {
         this.sshCredentialsId = sshCredentialsId
         this.sshAgent = new SshAgent(script, sshCredentialsId)
         this.licensingSupportType = getLicensingSupportType(script)
-        this.script.echo 'Detected Licensing Support Type: ' + this.licensingSupportType.title
+    }
+
+    def checkLicensingSupportType() {
+        if (LicensingSupportType.NONE == this.licensingSupportType) {
+            throw new Exception('No known Licensing Support is found in the project')
+        } else {
+            this.script.echo 'Detected Licensing Support Type: ' + this.licensingSupportType.title
+        }
     }
 
     def generateLicenseInfo() {
         if ('master' == this.branchName) {
+            checkLicensingSupportType()
+            script.echo 'Generating License Information'
             switch (this.licensingSupportType) {
                 case LicensingSupportType.GRADLE_HIERYNOMUS_LICENSE:
                     this.script.sh './gradlew deleteLicenses downloadLicenses copyLicenses'
@@ -27,8 +36,6 @@ class LicensingSupport implements Serializable {
                 case LicensingSupportType.RUBY_LICENSE_FINDER:
                     this.script.sh 'yarn licenses-report'
                     break
-                case LicensingSupportType.NONE:
-                    throw new Exception('No known Licensing Support is found in the project')
             }
         } else {
             script.echo 'Not working with the master branch. Skipping License Generation for the other branch.'
@@ -37,6 +44,8 @@ class LicensingSupport implements Serializable {
 
     def pushLicenseReport() {
         if ('master' == this.branchName) {
+            checkLicensingSupportType()
+            script.echo 'Updating License Information'
             switch (this.licensingSupportType) {
                 case LicensingSupportType.GRADLE_HIERYNOMUS_LICENSE:
                 case LicensingSupportType.RUBY_LICENSE_FINDER:
@@ -46,8 +55,6 @@ class LicensingSupport implements Serializable {
                     this.sshAgent.exec('git commit -m "updated license info"')
                     this.sshAgent.exec('git push --set-upstream origin master')
                     break
-                case LicensingSupportType.NONE:
-                    throw new Exception('No known Licensing Support is found in the project')
             }
         } else {
             script.echo 'Not working with the master branch. Skipping Push License Report for the other branch.'
