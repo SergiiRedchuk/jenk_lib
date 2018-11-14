@@ -6,13 +6,13 @@ class LicensingSupport implements Serializable {
     def script
     def branchName
     def sshAgent
-    def licensingSupportType
+    def licensingSupportType = null
+    def gradleRuntime = null
 
     LicensingSupport(script, branchName, sshAgent) {
         this.script = script
         this.branchName = branchName
         this.sshAgent = sshAgent
-        this.licensingSupportType = null
     }
 
     def initLicensingSupportType() {
@@ -32,7 +32,12 @@ class LicensingSupport implements Serializable {
             switch (this.licensingSupportType) {
                 case LicensingSupportType.GRADLE_HIERYNOMUS_LICENSE:
                     LicensingSupportUtils.addLicensingGradleTasks(this.script)
-                    this.script.sh './gradlew deleteLicenses downloadLicenses copyLicenses'
+                    if (null == this.gradleRuntime) {
+                        this.script.sh './gradlew deleteLicenses downloadLicenses copyLicenses'
+                    } else {
+                        this.gradleRuntime.run buildFile: 'build.gradle',
+                                tasks: 'deleteLicenses downloadLicenses copyLicenses'
+                    }
                     break
                 case LicensingSupportType.RUBY_LICENSE_FINDER:
                     this.script.sh 'yarn licenses-report'
