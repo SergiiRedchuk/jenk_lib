@@ -68,4 +68,9 @@ class LicensingSupport implements Serializable {
             script.echo 'Not working with the master branch. Skipping Push License Report for the other branch.'
         }
     }
+
+    def generateAndPushLicenseReport() {
+        generateLicenseReport()
+        pushLicenseReport()
+    }
 }
