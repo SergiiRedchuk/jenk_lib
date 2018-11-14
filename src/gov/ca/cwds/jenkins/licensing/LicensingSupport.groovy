@@ -18,7 +18,7 @@ class LicensingSupport implements Serializable {
     def initLicensingSupportType() {
         if (null == this.licensingSupportType) {
             this.licensingSupportType = LicensingSupportUtils.getLicensingSupportType(script)
-            this.script.info('Detected Licensing Support Type: ' + this.licensingSupportType.title)
+            this.script.echo('Detected Licensing Support Type: ' + this.licensingSupportType.title)
         }
         if (LicensingSupportType.NONE == this.licensingSupportType) {
             throw new Exception('No known Licensing Support is found in the project')
@@ -28,7 +28,7 @@ class LicensingSupport implements Serializable {
     def generateLicenseReport() {
         if ('master' == this.branchName) {
             initLicensingSupportType()
-            script.info 'Generating License Information'
+            script.echo 'Generating License Information'
             switch (this.licensingSupportType) {
                 case LicensingSupportType.GRADLE_HIERYNOMUS_LICENSE:
                     this.script.sh './gradlew deleteLicenses downloadLicenses copyLicenses'
@@ -38,14 +38,14 @@ class LicensingSupport implements Serializable {
                     break
             }
         } else {
-            script.info 'Not working with the master branch. Skipping License Generation for the other branch.'
+            script.echo 'Not working with the master branch. Skipping License Generation for the other branch.'
         }
     }
 
     def pushLicenseReport() {
         if ('master' == this.branchName) {
             initLicensingSupportType()
-            script.info 'Updating License Information'
+            script.echo 'Updating License Information'
             switch (this.licensingSupportType) {
                 case LicensingSupportType.GRADLE_HIERYNOMUS_LICENSE:
                 case LicensingSupportType.RUBY_LICENSE_FINDER:
@@ -57,7 +57,7 @@ class LicensingSupport implements Serializable {
                     break
             }
         } else {
-            script.info 'Not working with the master branch. Skipping Push License Report for the other branch.'
+            script.echo 'Not working with the master branch. Skipping Push License Report for the other branch.'
         }
     }
 }
