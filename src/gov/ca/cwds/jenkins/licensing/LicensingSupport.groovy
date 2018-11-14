@@ -1,8 +1,8 @@
 package gov.ca.cwds.jenkins.licensing
 
-class LicensingSupport implements Serializable {
-    final def LICENSE_FOLDER = 'legal'
+import static gov.ca.cwds.jenkins.licensing.LicensingSupportUtils.LICENSE_FOLDER
 
+class LicensingSupport implements Serializable {
     def script
     def branchName
     def sshAgent
@@ -31,6 +31,7 @@ class LicensingSupport implements Serializable {
             script.echo 'Generating License Information'
             switch (this.licensingSupportType) {
                 case LicensingSupportType.GRADLE_HIERYNOMUS_LICENSE:
+                    LicensingSupportUtils.addLicensingGradleTasks(this.script)
                     this.script.sh './gradlew deleteLicenses downloadLicenses copyLicenses'
                     break
                 case LicensingSupportType.RUBY_LICENSE_FINDER:
