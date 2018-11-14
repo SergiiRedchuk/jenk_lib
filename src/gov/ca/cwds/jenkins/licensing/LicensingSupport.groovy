@@ -1,6 +1,8 @@
 package gov.ca.cwds.jenkins.licensing
 
 import static gov.ca.cwds.jenkins.licensing.LicensingSupportUtils.LICENSE_FOLDER
+import static gov.ca.cwds.jenkins.utils.ProjectUtils.GIT_EMAIL
+import static gov.ca.cwds.jenkins.utils.ProjectUtils.GIT_USER
 
 class LicensingSupport implements Serializable {
     def script
@@ -18,7 +20,7 @@ class LicensingSupport implements Serializable {
     def initLicensingSupportType() {
         if (null == this.licensingSupportType) {
             this.licensingSupportType = LicensingSupportUtils.getLicensingSupportType(script)
-            this.script.echo('Detected Licensing Support Type: ' + this.licensingSupportType.title)
+            this.script.echo("Detected Licensing Support Type: ${this.licensingSupportType.title}")
         }
         if (LicensingSupportType.NONE == this.licensingSupportType) {
             throw new Exception('No known Licensing Support is found in the project')
@@ -55,9 +57,9 @@ class LicensingSupport implements Serializable {
             switch (this.licensingSupportType) {
                 case LicensingSupportType.GRADLE_HIERYNOMUS_LICENSE:
                 case LicensingSupportType.RUBY_LICENSE_FINDER:
-                    this.sshAgent.exec('git config --global user.name ' + gitProperties.user, true)
-                    this.sshAgent.exec('git config --global user.email ' + gitProperties.email, true)
-                    this.sshAgent.exec('git add ' + LICENSE_FOLDER)
+                    this.sshAgent.exec("git config --global user.name ${GIT_USER}", true)
+                    this.sshAgent.exec("git config --global user.email ${GIT_EMAIL}", true)
+                    this.sshAgent.exec("git add ${LICENSE_FOLDER}")
                     this.sshAgent.exec('git commit -m "updated license info"')
                     this.sshAgent.exec('git push --set-upstream origin master', true)
                     break

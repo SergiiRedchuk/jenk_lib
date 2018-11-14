@@ -1,6 +1,9 @@
 package gov.ca.cwds.jenkins.utils
 
 class ProjectUtils implements Serializable {
+    static def GIT_USER = 'Jenkins'
+    static def GIT_EMAIL = 'cwdsdoeteam@osi.ca.gov'
+
     static boolean hasGradleBuildFile(script) {
         script.sh (script: 'test -e build.gradle', returnStatus: true) == 0
     }
